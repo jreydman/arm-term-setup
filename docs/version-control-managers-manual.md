@@ -6,6 +6,8 @@
 
 * [Dependency control utils](#dependency-control-utils)
 
+* [Arm utils managers](link)
+
 ## Language version utils
 
 | ***Name*** 	| ***Language provider*** 	|                 ***Manual***                 	| rec 	|
@@ -50,3 +52,14 @@
 | cocoapods  	|                      ios/macos                     	| [LINK](https://guides.cocoapods.org/)              	|     	|
 
 ---
+
+## Arm utils managers
+
+| ***Name*** 	| ***OS***              	| ***Manual***                                                  	|
+|------------	|-----------------------	|---------------------------------------------------------------	|
+| APT        	| Debian/Ubuntu         	| [LINK](https://manpages.debian.org/stretch/apt/apt.8.en.html) 	|
+| yum        	| CentOS/Fedora         	| [LINK](http://yum.baseurl.org/)                               	|
+| dnf        	| Fedora                	| [LINK](https://dnf.readthedocs.io/en/latest/)                 	|
+| pacman     	| ArchLinux             	| [LINK](https://man.archlinux.org/man/pacman.8)                	|
+| flatpak    	| Linux ***universal*** 	| [LINK](https://docs.flatpak.org/en/latest/)                   	|
+| homebrew   	| macos                 	| [LINK](https://docs.brew.sh/)                                 	|
