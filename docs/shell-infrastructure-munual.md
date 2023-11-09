@@ -23,5 +23,5 @@
 
 ## Relations
 
-* [Package managers](link)
+* [Version control](version-control-managers-manual.md)
 * [Shell configuration](shell-configuration-manual.md)

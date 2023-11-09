@@ -6,7 +6,7 @@
 
 * [Dependency control utils](#dependency-control-utils)
 
-* [Arm utils managers](link)
+* [Arm utils managers](#arm-utils-managers)
 
 ## Language version utils
 
