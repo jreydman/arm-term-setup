@@ -10,7 +10,7 @@
 
 * [Sync pass util integration](docs/sync-pass-util-integration.md)
 
-* [Sell infrastructure](docs/shell-infrastructure-munual.md)
+* [Shell infrastructure](docs/shell-infrastructure-munual.md)
 
 * [Shell configuration](docs/shell-configuration-manual.md)
 
