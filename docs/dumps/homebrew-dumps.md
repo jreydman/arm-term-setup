@@ -1,0 +1,2 @@
+# Homebrew MacOS dumper
+
