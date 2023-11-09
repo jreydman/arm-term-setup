@@ -72,6 +72,6 @@
 
 * [Sync pass util integration](sync-pass-util-integration.md)
 
-* [Sell-infrastructure](shell-infrastructure-manual.md)
+* [Sell infrastructure](shell-infrastructure-munual)
 
 * [Shell configuration](shell-configuration-manual.md)
