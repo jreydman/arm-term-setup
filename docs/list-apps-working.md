@@ -15,3 +15,19 @@
 > ***Gpg*** +git> [manual](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 
 >***Pass*** +gpg> [off_manual](https://coderden.dev/posts/how-to-securely-store-passwords-with-gpg-pass) => [*custom*_manual](sync-pass-util-integration.md)
+
+---
+
+## Relation links
+
+* [Homepage](../README.md)
+
+* [Version control managers](version-control-managers-manual.md)
+
+* [Sync pass util integration](sync-pass-util-integration.md)
+
+* [Sell-infrastructure](shell-infrastructure-manual.md)
+
+* [Shell configuration](shell-configuration-manual.md)
+
+* [List apps for working](list-apps-working.md)

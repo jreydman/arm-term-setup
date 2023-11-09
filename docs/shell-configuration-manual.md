@@ -36,3 +36,19 @@
 > git
 
 > colorize => config types for colorful output of shell prompts
+
+---
+
+## Relation links
+
+* [Homepage](../README.md)
+
+* [Version control managers](version-control-managers-manual.md)
+
+* [Sync pass util integration](sync-pass-util-integration.md)
+
+* [Sell-infrastructure](shell-infrastructure-manual.md)
+
+* [Shell configuration](shell-configuration-manual.md)
+
+* [List apps for working](list-apps-working.md)

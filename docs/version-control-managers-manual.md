@@ -63,3 +63,15 @@
 | pacman     	| ArchLinux             	| [LINK](https://man.archlinux.org/man/pacman.8)                	|
 | flatpak    	| Linux ***universal*** 	| [LINK](https://docs.flatpak.org/en/latest/)                   	|
 | homebrew   	| macos                 	| [LINK](https://docs.brew.sh/)                                 	|
+
+---
+
+## Relation links
+
+* [Homepage](../README.md)
+
+* [Sync pass util integration](sync-pass-util-integration.md)
+
+* [Sell-infrastructure](shell-infrastructure-manual.md)
+
+* [Shell configuration](shell-configuration-manual.md)
