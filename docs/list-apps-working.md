@@ -2,11 +2,13 @@
 
 ## IDE list
 
-| ***Platform*** 	| ***Usage type*** 	| ***Manual***                           	| ***License***   	| ext 	|
-|----------------	|------------------	|----------------------------------------	|-----------------	|-----	|
-| jetbrains      	|    desktop app   	| [LINK](https://www.jetbrains.com/)     	|       true      	|     	|
-| vscode         	|    desktop app   	| [LINK](https://code.visualstudio.com/) 	|       free      	|     	|
-| nvim           	|     terminal     	| [LINK](https://neovim.io/)             	| free/opensource 	|  ✳️  	|
+| ***Platform***     	| ***Usage type*** 	| ***Manual***                                            	| ***License***   	| ext 	|
+|--------------------	|------------------	|---------------------------------------------------------	|-----------------	|-----	|
+| jetbrains          	|    desktop app   	| [LINK](https://www.jetbrains.com/)                      	|       true      	|     	|
+| vscode             	|    desktop app   	| [LINK](https://code.visualstudio.com/)                  	|       free      	|     	|
+| nvim               	|     terminal     	| [LINK](https://neovim.io/)                              	| free/opensource 	|  ✳️  	|
+| docker desktop     	|      desktop     	| [LINK](https://www.docker.com/products/docker-desktop/) 	|       free      	|  ✳️  	|
+| docker-compose cli 	|     terminal     	| [LINK](https://docs.docker.com/compose/reference/)      	|  free/opensouce 	|  ✳️  	|
 
 ---
 
