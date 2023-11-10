@@ -1,13 +1,18 @@
-# OVERRIDE -- XDG endpoints
+#!/bin/bash
 
-# XDG_DATA_HOME=$HOME/Library
-# XDG_CONFIG_HOME=$HOME/Library/Preferences
-# XDG_CACHE_HOME=$HOME/Library/Caches
-# XDG_RUNTIME_DIR=$HOME/Library/Caches/TemporaryItems
+# OVERRIDE -- XDG/default endpoints
+
+#declare -A default_paths_dictionary=( ["XDG_DATA_HOME"]="$HOME/.local/#share" ["XDG_CONFIG_HOME"]="$HOME/.config" ["XDG_CACHE_HOME"]="$HOME/.cache" ["XDG_RUNTIME_DIR"]="$HOME/.tmp")
+#-------------------------------------------------------#
+# declare -A xdg_paths_dictionary
+# xdg_paths_dictionary["XDG_DATA_HOME"]=$HOME/Library
+# xdg_paths_dictionary["XDG_CONFIG_HOME"]=$HOME/Library/Preferences
+# xdg_paths_dictionary["XDG_CACHE_HOME"]=$HOME/Library/Caches
+# xdg_paths_dictionary["XDG_RUNTIME_DIR"]=$HOME/Library/Caches/TemporaryItems
+
 
 RC_PROFILE_FILE=.zprofile
 RC_FILE=.zshrc
-
 #########################################################
 
 logger() { echo "Log: <$1>    |$2|    $3"; }
@@ -16,7 +21,7 @@ logger:flow() { echo "Log: <$1>    |$2|>flow[$3]    $4"; }
 xdg-environment-refresh() {
   check_and_set() {
     local var_name=$1; local var_path=$2
-    [ -z "${!var_name}" ] && eval "$var_name=\$HOME/$var_path" && logger:flow info> xdg:environment:check $var_path successful || logger:flow warning xdg:environment:check $var_path "already exists"
+    [ -z "${!var_name}" ] && eval "$var_name=\$HOME/$var_path" && logger:flow info xdg:environment:check $var_path successful || logger:flow warning xdg:environment:check $var_path "already exists"
   }
   check_and_set XDG_DATA_HOME .local/share
   check_and_set XDG_CONFIG_HOME .config
@@ -28,11 +33,7 @@ homebrew-install() {
 logger info homebrew:install init
 command -v brew &> /dev/null && { logger warning> homebrew:install "already exists"; return; }
 /bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
-wait &&
-logger:flow info homebrew:install opt-write	successful &&
-(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE &&
-eval "$(/opt/homebrew/bin/brew shellenv)" &&
-logger:flow info homebrew:install init successful
+wait && logger:flow info homebrew:install opt-write successful && (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE && eval "$(/opt/homebrew/bin/brew shellenv)" && logger:flow info homebrew:install init successful
 }
 
 zsh-paths-refresh() {
@@ -72,6 +73,7 @@ cat > $(eval echo "$ZSH_CONFIG/$RC_FILE") <<EOL
 export ROOT=/
 export DATE=\$(date +'20%y-%m-%d')
 export DATETIME=\$(date)
+export BASH_VERSION="$(/bin/bash --version)"
 
 # -- observer[XDG]
 export XDG_DATA_HOME=$XDG_DATA_HOME	# -- observer-point
@@ -111,6 +113,5 @@ zsh-paths-refresh	# initialise xdg infrastructure
 homebrew-install	# checkin homebrew
 }
 #########################################################
-# SETUP
-zsh-ln-refresh
+SETUP
 logger:flow info bash:compose:log close successful
