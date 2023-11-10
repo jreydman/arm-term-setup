@@ -31,13 +31,11 @@ xdg-environment-refresh() {
   check_and_set XDG_CACHE_HOME .cache
   check_and_set XDG_RUNTIME_DIR .tmp
 }
-
+homebrew-uninstall() { logger info homebrew:uninstall init; rm -rf $(eval echo $HOMEBREW_PREFIX); rm -rf $(eval echo $HOMEBREW_REPOSITYRY); rm -rf $(eval echo $HOMEBREW_CACHE); rm -rf $(eval echo $HOMEBREW_TEMP); export PATH=$(echo $PATH | tr ':' '\n' | grep -v $(eval echo $HOMEBREW_PREFIX)/bin | tr '\n' ':'); export PATH=$(echo $PATH | tr ':' '\n' | grep -v $(eval echo $HOMEBREW_PREFIX)/sbin | tr '\n' ':'); logger info homebrew:uninstall successful; }
 homebrew-check() {
 logger info homebrew:check init
 PATH="/opt/homebrew/bin:$PATH"
 command -v brew &> /dev/null && { logger:flow warning homebrew:check install "already exists"; return; }
-# NONINTERACTIVE=1 /bin/bash -c -i "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
-
 mkdir $(eval echo $HOMEBREW_PREFIX) && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $(eval echo $HOMEBREW_PREFIX) &&
 wait && logger:flow info homebrew:check init successful
 }
@@ -136,4 +134,9 @@ homebrew-check		# checkin homebrew
 }
 #########################################################
 SETUP
+# homebrew-uninstall
 logger:flow info bash:compose:log close successful
+
+# IN LAST
+zsh-rc-check
+clear && printf '\e[3J' && cat $HOME/$RC_FILE
