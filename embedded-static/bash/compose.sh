@@ -2,6 +2,8 @@
 
 set -e
 
+SH_SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+
 # OVERRIDE -- XDG/default endpoints
 
 #-------------------------------------------------------#
@@ -16,8 +18,8 @@ RC_FILE=.zshrc
 RC_ENV_FILE=.zshenv
 #########################################################
 
-logger() { echo "Log: <$1>    |$2|    $3"; }
-logger:flow() { echo "Log: <$1>    |$2|>flow[$3]    $4"; }
+logger() { printf "($SH_SCRIPT_DIR)|Log: <%s>\t|%s|\t%s\n" "$1" "$2" "$3"; }
+logger:flow() { printf "($SH_SCRIPT_DIR)|Log: <%s>\t|%s|>flow[%s]\t%s\n" "$1" "$2" "$3" "$4"; }
 
 xdg-environment-refresh() {
   check_and_set() {
@@ -132,6 +134,4 @@ homebrew-check		# checkin homebrew
 }
 #########################################################
 SETUP
-
-
 logger:flow info bash:compose:log close successful
