@@ -1,6 +1,11 @@
 
 ***compose.sh***
 
+Overrides
+* XDG_*
+* ZSH_*
+* [homebrew](../../docs//dumps/homebrew-dumps.md)
+
 Functionality
 
     zsh-dump-rc [*]
