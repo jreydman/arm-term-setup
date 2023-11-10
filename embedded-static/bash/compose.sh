@@ -32,15 +32,18 @@ echo "Log: <info>	|zsh:paths:check|	successful"
 
 zsh-ln-refresh() {
 echo "Log: <info>	|zsh:ln:check|	init"
-[ -e $HOME/.zprofile ] || ln -Fs $(eval echo "$ZSH_CONFIG/.zprofile") $HOME/.zprofile && echo "Log: <warning>	|zsh:ln:check|>flow[zprofile]	already exists"
-[ -e $HOME/.zshrc ] || ln -Fs $(eval echo "$ZSH_CONFIG/.zshrc") $HOME/.zshrc && echo "Log: <warning>	|zsh:ln:check|>flow[zshrc]	already exists"
+[ -e $HOME/.zprofile ] || ln -s $(eval echo "$ZSH_CONFIG/.zprofile") $HOME/.zprofile && echo "Log: <warning>	|zsh:ln:check|>flow[zprofile]	already exists"
+[ -e $HOME/.zshrc ] || ln -s $(eval echo "$ZSH_CONFIG/.zshrc") $HOME/.zshrc && echo "Log: <warning>	|zsh:ln:check|>flow[zshrc]	already exists"
 echo "Log: <info>	|zsh:ln:check|	successful"
 }
 
 zsh-dump-rc() {
 xdg-environment-refresh
 echo "Log: <info>	|zsh:dump:rc|	init"
-cat > $(eval echo "$XDG_CONFIG_HOME/.zshrc") <<EOL
+ZSH_CONFIG=$XDG_CONFIG_HOME/zsh
+rm -rf $(eval echo "$ZSH_CONFIG")
+mkdir -p $(eval echo "$ZSH_CONFIG")
+cat > $(eval echo "$ZSH_CONFIG/.zshrc") <<EOL
 #########################################################
 # 		OVERWRITE -- [protected]		#
 #-------------------------------------------------------#
@@ -74,6 +77,7 @@ export HOMEBREW_CACHE=\$XDG_CACHE_HOME/homebrew
 export HOMEBREW_TEMP=\$XDG_RUNTIME_DIR/homebrew
 EOL
 echo "Log: <info>	|zsh:dump:rc|>flow[z-write]	successful"
+source $(eval echo "$ZSH_CONFIG/.zshrc") && echo "Log:	<info>	|root:source:check|>flow[zshrc] successful"
 zsh-ln-refresh
 }
 
