@@ -16,21 +16,21 @@ xdg-environment-refresh() {
 
 homebrew-install() {
 echo "Log:	<info>	|homebrew:install|	init"
-command -v brew &> /dev/null && echo "Log:	<warning>	|homebrew:install| already exists" || /bin/bash -i -c "$(curl -fsSL --quiet https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &
-wait
-echo "Log:	<info>	|homebrew:install|>flow[opt-write]	successful"
-
-(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/.zshrc
-eval "$(/opt/homebrew/bin/brew shellenv)"
+command -v brew &> /dev/null && { echo "Log:	<warning>	|homebrew:install| already exists"; return; }
+/bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
+wait &&
+echo "Log:	<info>	|homebrew:install|>flow[opt-write]	successful" &&
+(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/.zshrc &&
+eval "$(/opt/homebrew/bin/brew shellenv)" &&
 echo "Log:	<info>	|homebrew:install|>flow[init] successful"
 }
 
 zsh-paths-refresh() {
 echo "Log: <info>	|zsh:paths:check|	init"
-[ -d $ZSH ] || mkdir -p $ZSH && echo "Log:	<warning>	|zsh:paths:check|>flow[DATA]	already exists"
-[ -d $ZSH_CONFIG ] || mkdir -p $ZSH_CONFIG && echo "Log:	<warning>	|zsh:paths:check|>flow[CONFIG]	already exists"
-[ -d $ZSH_CACHE ] || mkdir -p $ZSH_CACHE && echo "Log:	<warning>	|zsh:paths:check|>flow[CACHE]	already exists"
-[ -d $ZSH_TEMP ] || mkdir -p $ZSH_TEMP && echo "Log:	<warning>	|zsh:paths:check|>flow[TEMP]	already exists"
+directories=("$ZSH" "$ZSH_CONFIG" "$ZSH_CACHE" "$ZSH_TEMP")
+for dir in "${directories[@]}"; do
+    [ -d "$dir" ] || mkdir -p "$dir" && echo "Log:	<warning>	|zsh:paths:check|>flow[${dir}]	already exists"
+done
 echo "Log: <info>	|zsh:paths:check|	successful"
 }
 
@@ -80,11 +80,14 @@ export HOMEBREW_PREFIX=\$XDG_CONFIG_HOME/homebrew
 export HOMEBREW_CACHE=\$XDG_CACHE_HOME/homebrew
 export HOMEBREW_TEMP=\$XDG_RUNTIME_DIR/homebrew
 #########################################################
-
+# -- EXTENSIONS
 EOL
 echo "Log: <info>	|zsh:dump:rc|>flow[z-write]	successful"
 source $(eval echo "$ZSH_CONFIG/.zshrc") && echo "Log:	<info>	|root:source:check|>flow[zshrc] successful"
 zsh-ln-refresh
+
+#[homebrew] ext #########################################
+command -v brew &> /dev/null && { (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/.zshrc && wait; }
 }
 
 #########################################################
