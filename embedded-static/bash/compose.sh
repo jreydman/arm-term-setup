@@ -13,6 +13,7 @@ set -e
 
 RC_PROFILE_FILE=.zprofile
 RC_FILE=.zshrc
+RC_ENV_FILE=.zshenv
 #########################################################
 
 logger() { echo "Log: <$1>    |$2|    $3"; }
@@ -61,8 +62,7 @@ zsh-rc-dump() {
 xdg-environment-refresh
 logger info zsh:rc:dump init
 ZSH_CONFIG=$XDG_CONFIG_HOME/zsh
-rm -rf $(eval echo "$ZSH_CONFIG")
-mkdir -p $(eval echo "$ZSH_CONFIG")
+find $(eval echo "$ZSH_CONFIG")/ -mindepth 1 -maxdepth 1 -not -name $RC_PROFILE_FILE -exec rm -r {} +
 
 [ ! -e $(eval echo "$ZSH_CONFIG/$RC_PROFILE_FILE") ] && touch $(eval echo "$ZSH_CONFIG/$RC_PROFILE_FILE") && logger:flow info zsh:rc:dump $RC_PROFILE_FILE created || logger:flow warning zsh:rc:dump $RC_PROFILE_FILE "already exists"
 
@@ -124,10 +124,11 @@ logger info zsh:rc:dump successful
 # [ -e $(eval echo "$ZSH_CONFIG/$RC_PROFILE_FILE") ] || echo "Hello, this is the content of the file!" > $HOME/$RC_PROFILE_FILE
 #########################################################
 SETUP() {
-zsh-rc-dump		# initialise zsh
 zsh-paths-refresh	# initialise xdg infrastructure
+zsh-rc-dump		# initialise zsh
 homebrew-check		# checkin homebrew
 }
 #########################################################
 SETUP
+
 logger:flow info bash:compose:log close successful
