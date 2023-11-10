@@ -8,13 +8,15 @@ Overrides
 
 Functionality
 
-    zsh-dump-rc [*]
+    zsh-rc-dump [*]
 
-        zsh-ln-refresh
+        zsh-ln-refresh [*]
 
         zsh-paths-refresh
 
-        homebrew-install
+        zsh-rc-check [*]
+
+        homebrew-check
 
         xdg-environment-refresh
 
