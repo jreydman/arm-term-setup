@@ -34,7 +34,9 @@ homebrew-check() {
 logger info homebrew:check init
 PATH="/opt/homebrew/bin:$PATH"
 command -v brew &> /dev/null && { logger:flow warning homebrew:check install "already exists"; return; }
-/bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
+# NONINTERACTIVE=1 /bin/bash -c -i "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
+
+mkdir $(eval echo $HOMEBREW_PREFIX) && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $(eval echo $HOMEBREW_PREFIX) &&
 wait && logger:flow info homebrew:check init successful
 }
 
@@ -111,9 +113,9 @@ zsh-ln-refresh
 zsh-rc-check
 
 #[home brew] ext #########################################
-command -v /opt/homebrew/bin/brew &> /dev/null && { 
-	(echo "# Homebrew ROOT automate"; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE
-	eval "$(/opt/homebrew/bin/brew shellenv)"
+command -v $HOMEBREW_PREFIX/bin/brew &> /dev/null && {
+	(echo "# Homebrew EXT automate"; echo "eval \"\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\"") >> $HOME/$RC_FILE
+	eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
 	logger:flow info zsh:rc:dump opt:homebrew observed
 	wait
 }
@@ -130,5 +132,6 @@ homebrew-check		# checkin homebrew
 }
 #########################################################
 SETUP
+
 
 logger:flow info bash:compose:log close successful
