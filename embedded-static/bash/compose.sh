@@ -9,7 +9,6 @@
 
 xdg-environment-refresh() {
 [ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME=\$HOME/.local/share && echo "Log:	<info>	|xdg:environment:check|>flow[DATA] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[DATA] already exists"
-
 [ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME=\$HOME/.config && echo "Log:	<info>	|xdg:environment:check|>flow[CONFIG] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[CONFIG] already exists"
 [ -z "$XDG_CACHE_HOME" ] && XDG_CACHE_HOME=\$HOME/.cache && echo "Log:	<info>	|xdg:environment:check|>flow[CACHE] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[CACHE] already exists"
 [ -z "$XDG_RUNTIME_DIR" ] && XDG_RUNTIME_DIR=\$HOME/.tmp && echo "Log:	<info>	|xdg:environment:check|>flow[TEMP] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[TEMP] already exists"
@@ -33,7 +32,8 @@ echo "Log: <info>	|zsh:paths:check|	successful"
 
 zsh-ln-refresh() {
 echo "Log: <info>	|zsh:ln:check|	init"
-[ -e $HOME/.zprofile ] || ln -s $ZSH_CONFIG/.zprofile $HOME/.zprofile && echo "Log: <warning>	|zsh:ln:check|>flow[zprofile]	already exists"
+[ -e $HOME/.zprofile ] || ln -Fs $(eval echo "$ZSH_CONFIG/.zprofile") $HOME/.zprofile && echo "Log: <warning>	|zsh:ln:check|>flow[zprofile]	already exists"
+[ -e $HOME/.zshrc ] || ln -Fs $(eval echo "$ZSH_CONFIG/.zshrc") $HOME/.zshrc && echo "Log: <warning>	|zsh:ln:check|>flow[zshrc]	already exists"
 echo "Log: <info>	|zsh:ln:check|	successful"
 }
 
@@ -73,7 +73,8 @@ export HOMEBREW_PREFIX=\$XDG_CONFIG_HOME/homebrew
 export HOMEBREW_CACHE=\$XDG_CACHE_HOME/homebrew
 export HOMEBREW_TEMP=\$XDG_RUNTIME_DIR/homebrew
 EOL
-echo "Log: <info>	|zsh:dump:rc|	successful"
+echo "Log: <info>	|zsh:dump:rc|>flow[z-write]	successful"
+zsh-ln-refresh
 }
 
 zsh-dump-rc
