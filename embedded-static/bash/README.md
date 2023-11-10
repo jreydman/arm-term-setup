@@ -1,11 +1,13 @@
 
-***compose.sh***
+# ***bash.linter***
 
-Using
+## Using
 
 ```bash
 /bin/bash init.sh
 ```
+
+### Composer
 
 Overrides
 * XDG_*
