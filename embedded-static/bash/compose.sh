@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # OVERRIDE -- XDG/default endpoints
 
 #-------------------------------------------------------#
@@ -27,12 +29,12 @@ xdg-environment-refresh() {
   check_and_set XDG_RUNTIME_DIR .tmp
 }
 
-homebrew-install() {
-logger info homebrew:install init
-command -v brew &> /dev/null && { logger warning homebrew:install "already exists"; return; }
+homebrew-check() {
+logger info homebrew:check init
 PATH="/opt/homebrew/bin:$PATH"
+command -v brew &> /dev/null && { logger:flow warning homebrew:check install "already exists"; return; }
 /bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
-wait && logger:flow info homebrew:install opt-write successful && (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $ZSH_CONFIG/$RC_FILE && (echo; echo 'export PATH="/opt/homebrew/bin:$PATH"') >> $ZSH_CONFIG/$RC_FILE && eval "$(/opt/homebrew/bin/brew shellenv)" && logger:flow info homebrew:install init successful
+wait && logger:flow info homebrew:check init successful
 }
 
 zsh-paths-refresh() {
@@ -108,8 +110,13 @@ logger:flow info zsh:rc:dump rc-write successful
 zsh-ln-refresh
 zsh-rc-check
 
-#[homebrew] ext #########################################
-command -v brew &> /dev/null && { (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE && wait; }
+#[home brew] ext #########################################
+command -v /opt/homebrew/bin/brew &> /dev/null && { 
+	(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE
+	logger:flow info zsh:rc:dump opt:homebrew observed
+	wait
+}
+logger info zsh:rc:dump successful
 }
 
 # -- OVERRIDE -- [protected] > rcprofile
@@ -118,7 +125,7 @@ command -v brew &> /dev/null && { (echo; echo 'eval "$(/opt/homebrew/bin/brew sh
 SETUP() {
 zsh-rc-dump		# initialise zsh
 zsh-paths-refresh	# initialise xdg infrastructure
-homebrew-install	# checkin homebrew
+homebrew-check		# checkin homebrew
 }
 #########################################################
 SETUP
