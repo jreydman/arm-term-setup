@@ -16,9 +16,13 @@ xdg-environment-refresh() {
 
 homebrew-install() {
 echo "Log:	<info>	|homebrew:install|	init"
-command -v brew &> /dev/null && echo "Log:	<warning>	|homebrew:install| already exists" || /bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &
+command -v brew &> /dev/null && echo "Log:	<warning>	|homebrew:install| already exists" || /bin/bash -i -c "$(curl -fsSL --quiet https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &
 wait
-echo "Log:	<info>	|homebrew:install| successful"
+echo "Log:	<info>	|homebrew:install|>flow[opt-write]	successful"
+
+(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/.zshrc
+eval "$(/opt/homebrew/bin/brew shellenv)"
+echo "Log:	<info>	|homebrew:install|>flow[init] successful"
 }
 
 zsh-paths-refresh() {
@@ -58,7 +62,7 @@ export DATE=\$(date +'20%y-%m-%d')
 export DATETIME=\$(date)
 
 # -- observer[XDG]
-export XDG_DATA_HOME=$XDG_DATA_HOME		# -- observer-point
+export XDG_DATA_HOME=$XDG_DATA_HOME	# -- observer-point
 export XDG_CONFIG_HOME=$XDG_CONFIG_HOME		# -- observer-point
 export XDG_CACHE_HOME=$XDG_CACHE_HOME		# -- observer-point
 export XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR		# -- observer-point
@@ -75,10 +79,21 @@ export HOMEBREW_REPOSITORY=\$XDG_DATA_HOME/homebrew
 export HOMEBREW_PREFIX=\$XDG_CONFIG_HOME/homebrew
 export HOMEBREW_CACHE=\$XDG_CACHE_HOME/homebrew
 export HOMEBREW_TEMP=\$XDG_RUNTIME_DIR/homebrew
+#########################################################
+
 EOL
 echo "Log: <info>	|zsh:dump:rc|>flow[z-write]	successful"
 source $(eval echo "$ZSH_CONFIG/.zshrc") && echo "Log:	<info>	|root:source:check|>flow[zshrc] successful"
 zsh-ln-refresh
 }
 
-zsh-dump-rc
+#########################################################
+
+SETUP() {
+zsh-dump-rc		# initialise zsh
+zsh-paths-refresh	# initialise xdg infrastructure
+homebrew-install	# checkin homebrew
+}
+
+#########################################################
+SETUP
