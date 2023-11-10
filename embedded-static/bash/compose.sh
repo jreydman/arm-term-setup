@@ -2,14 +2,12 @@
 
 # OVERRIDE -- XDG/default endpoints
 
-#declare -A default_paths_dictionary=( ["XDG_DATA_HOME"]="$HOME/.local/#share" ["XDG_CONFIG_HOME"]="$HOME/.config" ["XDG_CACHE_HOME"]="$HOME/.cache" ["XDG_RUNTIME_DIR"]="$HOME/.tmp")
 #-------------------------------------------------------#
-# declare -A xdg_paths_dictionary
-# xdg_paths_dictionary["XDG_DATA_HOME"]=$HOME/Library
-# xdg_paths_dictionary["XDG_CONFIG_HOME"]=$HOME/Library/Preferences
-# xdg_paths_dictionary["XDG_CACHE_HOME"]=$HOME/Library/Caches
-# xdg_paths_dictionary["XDG_RUNTIME_DIR"]=$HOME/Library/Caches/TemporaryItems
-
+# XDG_DATA_HOME=$HOME/Library				#
+# XDG_CONFIG_HOME=$HOME/Library/Preferences		#
+# XDG_CACHE_HOME=$HOME/Library/Caches			#
+# XDG_RUNTIME_DIR=$HOME/Library/Caches/TemporaryItems	#
+#-------------------------------------------------------#
 
 RC_PROFILE_FILE=.zprofile
 RC_FILE=.zshrc
@@ -31,9 +29,10 @@ xdg-environment-refresh() {
 
 homebrew-install() {
 logger info homebrew:install init
-command -v brew &> /dev/null && { logger warning> homebrew:install "already exists"; return; }
+command -v brew &> /dev/null && { logger warning homebrew:install "already exists"; return; }
+PATH="/opt/homebrew/bin:$PATH"
 /bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &&
-wait && logger:flow info homebrew:install opt-write successful && (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE && eval "$(/opt/homebrew/bin/brew shellenv)" && logger:flow info homebrew:install init successful
+wait && logger:flow info homebrew:install opt-write successful && (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $ZSH_CONFIG/$RC_FILE && (echo; echo 'export PATH="/opt/homebrew/bin:$PATH"') >> $ZSH_CONFIG/$RC_FILE && eval "$(/opt/homebrew/bin/brew shellenv)" && logger:flow info homebrew:install init successful
 }
 
 zsh-paths-refresh() {
@@ -45,6 +44,8 @@ done
 logger info zsh:paths:check	successful
 }
 
+zsh-rc-check() { source $(eval echo "$ZSH_CONFIG/$RC_FILE") && logger:flow info root:source:check $RC_FILE successful; }
+
 zsh-ln-refresh() {
 logger info zsh:ln:check init
 links=("$RC_FILE" "$RC_PROFILE_FILE")
@@ -54,12 +55,15 @@ done
 logger info zsh:ln:check successful
 }
 
-zsh-dump-rc() {
+zsh-rc-dump() {
 xdg-environment-refresh
-logger info zsh:dump:rc init
+logger info zsh:rc:dump init
 ZSH_CONFIG=$XDG_CONFIG_HOME/zsh
 rm -rf $(eval echo "$ZSH_CONFIG")
 mkdir -p $(eval echo "$ZSH_CONFIG")
+
+[ ! -e $(eval echo "$ZSH_CONFIG/$RC_PROFILE_FILE") ] && touch $(eval echo "$ZSH_CONFIG/$RC_PROFILE_FILE") && logger:flow info zsh:rc:dump $RC_PROFILE_FILE created || logger:flow warning zsh:rc:dump $RC_PROFILE_FILE "already exists"
+
 cat > $(eval echo "$ZSH_CONFIG/$RC_FILE") <<EOL
 #########################################################
 # 		OVERWRITE -- [protected]		#
@@ -82,6 +86,10 @@ export XDG_CACHE_HOME=$XDG_CACHE_HOME		# -- observer-point
 export XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR		# -- observer-point
 # -- end-observer[XDG]
 
+# override native bash environments
+export BASH_SESSIONS_DIR=$XDG_RUNTIME_DIR/bash/.bash_sessions
+export HISTFILE=$XDG_RUNTIME_DIR/bash/.bash_history
+
 # override zsh shell app root dir 
 export ZSH=\$XDG_DATA_HOME/zsh
 export ZSH_CONFIG=\$XDG_CONFIG_HOME/zsh
@@ -96,9 +104,9 @@ export HOMEBREW_TEMP=\$XDG_RUNTIME_DIR/homebrew
 #########################################################
 # -- EXTENSIONS -- [protected]
 EOL
-logger:flow info zsh:dump:rc z-write successful
-source $(eval echo "$ZSH_CONFIG/$RC_FILE") && logger:flow info root:source:check $RC_FILE successful
+logger:flow info zsh:rc:dump rc-write successful
 zsh-ln-refresh
+zsh-rc-check
 
 #[homebrew] ext #########################################
 command -v brew &> /dev/null && { (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE && wait; }
@@ -108,7 +116,7 @@ command -v brew &> /dev/null && { (echo; echo 'eval "$(/opt/homebrew/bin/brew sh
 # [ -e $(eval echo "$ZSH_CONFIG/$RC_PROFILE_FILE") ] || echo "Hello, this is the content of the file!" > $HOME/$RC_PROFILE_FILE
 #########################################################
 SETUP() {
-zsh-dump-rc		# initialise zsh
+zsh-rc-dump		# initialise zsh
 zsh-paths-refresh	# initialise xdg infrastructure
 homebrew-install	# checkin homebrew
 }
