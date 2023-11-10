@@ -8,10 +8,14 @@
 #########################################################
 
 xdg-environment-refresh() {
-[ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME=\$HOME/.local/share && echo "Log:	<info>	|xdg:environment:check|>flow[DATA] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[DATA] already exists"
-[ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME=\$HOME/.config && echo "Log:	<info>	|xdg:environment:check|>flow[CONFIG] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[CONFIG] already exists"
-[ -z "$XDG_CACHE_HOME" ] && XDG_CACHE_HOME=\$HOME/.cache && echo "Log:	<info>	|xdg:environment:check|>flow[CACHE] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[CACHE] already exists"
-[ -z "$XDG_RUNTIME_DIR" ] && XDG_RUNTIME_DIR=\$HOME/.tmp && echo "Log:	<info>	|xdg:environment:check|>flow[TEMP] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[TEMP] already exists"
+  check_and_set() {
+    local var_name=$1; local var_path=$2
+    [ -z "${!var_name}" ] && eval "$var_name=\$HOME/$var_path" && echo "Log:	<info>	|xdg:environment:check|>flow[$var_path] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[$var_path] already exists"
+  }
+  check_and_set XDG_DATA_HOME .local/share
+  check_and_set XDG_CONFIG_HOME .config
+  check_and_set XDG_CACHE_HOME .cache
+  check_and_set XDG_RUNTIME_DIR .tmp
 }
 
 homebrew-install() {
