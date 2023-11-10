@@ -15,4 +15,4 @@ compose.sh
 
 * [Shell-infrastructure](../../docs/shell-infrastructure-munual.md)
 
-* [SH logger](../../docs/dumbs/sh-logger-manual.md)
+* [SH logger](../../docs/dumps/sh-logger-manual.md)
