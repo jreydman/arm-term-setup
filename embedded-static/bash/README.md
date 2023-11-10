@@ -22,3 +22,5 @@ Functionality
 * [Shell-infrastructure](../../docs/shell-infrastructure-munual.md)
 
 * [SH logger](../../docs/dumps/sh-logger-manual.md)
+
+* [Homebrew dump](../../docs//dumps/homebrew-dumps.md)
