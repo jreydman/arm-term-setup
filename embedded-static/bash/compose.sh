@@ -1,8 +1,25 @@
+# OVERRIDE -- XDG endpoints
+
+# XDG_DATA_HOME=$HOME/Library
+# XDG_CONFIG_HOME=$HOME/Library/Preferences
+# XDG_CACHE_HOME=$HOME/Library/Caches
+# XDG_RUNTIME_DIR=$HOME/Library/Caches/TemporaryItems
+
+#########################################################
+
+xdg-environment-refresh() {
+[ -z "$XDG_DATA_HOME" ] && XDG_DATA_HOME=\$HOME/.local/share && echo "Log:	<info>	|xdg:environment:check|>flow[DATA] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[DATA] already exists"
+
+[ -z "$XDG_CONFIG_HOME" ] && XDG_CONFIG_HOME=\$HOME/.config && echo "Log:	<info>	|xdg:environment:check|>flow[CONFIG] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[CONFIG] already exists"
+[ -z "$XDG_CACHE_HOME" ] && XDG_CACHE_HOME=\$HOME/.cache && echo "Log:	<info>	|xdg:environment:check|>flow[CACHE] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[CACHE] already exists"
+[ -z "$XDG_RUNTIME_DIR" ] && XDG_RUNTIME_DIR=\$HOME/.tmp && echo "Log:	<info>	|xdg:environment:check|>flow[TEMP] successful" || echo "Log:	<warning>	|xdg:environment:check|>flow[TEMP] already exists"
+}
+
 homebrew-install() {
 echo "Log:	<info>	|homebrew:install|	init"
 command -v brew &> /dev/null && echo "Log:	<warning>	|homebrew:install| already exists" || /bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &
 wait
-echo "Log:	<info>	|homebrew:install|?>flow[_] successful"
+echo "Log:	<info>	|homebrew:install| successful"
 }
 
 zsh-paths-refresh() {
@@ -19,3 +36,44 @@ echo "Log: <info>	|zsh:ln:check|	init"
 [ -e $HOME/.zprofile ] || ln -s $ZSH_CONFIG/.zprofile $HOME/.zprofile && echo "Log: <warning>	|zsh:ln:check|>flow[zprofile]	already exists"
 echo "Log: <info>	|zsh:ln:check|	successful"
 }
+
+zsh-dump-rc() {
+xdg-environment-refresh
+echo "Log: <info>	|zsh:dump:rc|	init"
+cat > $(eval echo "$XDG_CONFIG_HOME/.zshrc") <<EOL
+#########################################################
+# 		OVERWRITE -- [protected]		#
+#-------------------------------------------------------#
+# [alterworld] term dumper				#
+# author: 		<pikj.reyderman@gmail.com>	#
+# specification: 	XDG				#
+# root manual: 		https://shorturl.at/fjAB3	#
+#########################################################
+
+export ROOT=/
+export DATE=\$(date +'20%y-%m-%d')
+export DATETIME=\$(date)
+
+# -- observer[XDG]
+export XDG_DATA_HOME=$XDG_DATA_HOME		# -- observer-point
+export XDG_CONFIG_HOME=$XDG_CONFIG_HOME		# -- observer-point
+export XDG_CACHE_HOME=$XDG_CACHE_HOME		# -- observer-point
+export XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR		# -- observer-point
+# -- end-observer[XDG]
+
+# override zsh shell app root dir 
+export ZSH=\$XDG_DATA_HOME/zsh
+export ZSH_CONFIG=\$XDG_CONFIG_HOME/zsh
+export ZSH_CACHE=\$XDG_CACHE_HOME/zsh
+export ZSH_TEMP=\$XDG_RUNTIME_DIR/zsh
+
+# override homebrew package manager paths
+export HOMEBREW_REPOSITORY=\$XDG_DATA_HOME/homebrew
+export HOMEBREW_PREFIX=\$XDG_CONFIG_HOME/homebrew
+export HOMEBREW_CACHE=\$XDG_CACHE_HOME/homebrew
+export HOMEBREW_TEMP=\$XDG_RUNTIME_DIR/homebrew
+EOL
+echo "Log: <info>	|zsh:dump:rc|	successful"
+}
+
+zsh-dump-rc
