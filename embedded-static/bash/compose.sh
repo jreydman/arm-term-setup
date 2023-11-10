@@ -112,7 +112,8 @@ zsh-rc-check
 
 #[home brew] ext #########################################
 command -v /opt/homebrew/bin/brew &> /dev/null && { 
-	(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE
+	(echo "# Homebrew ROOT automate"; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/$RC_FILE
+	eval "$(/opt/homebrew/bin/brew shellenv)"
 	logger:flow info zsh:rc:dump opt:homebrew observed
 	wait
 }
