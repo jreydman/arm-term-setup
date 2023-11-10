@@ -2,7 +2,7 @@ homebrew-install() {
 echo "Log:	<info>	|homebrew:install|	init"
 command -v brew &> /dev/null && echo "Log:	<warning>	|homebrew:install| already exists" || /bin/bash -i -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &
 wait
-echo "Log:	<info>	|homebrew:install| successful"
+echo "Log:	<info>	|homebrew:install|?>flow[_] successful"
 }
 
 zsh-paths-refresh() {
