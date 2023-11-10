@@ -1,11 +1,17 @@
 
-compose.sh
+***compose.sh***
 
-> zsh-dump-rc [*]
-> zsh-ln-refresh
-> zsh-paths-refresh
-> homebrew-install
-> xdg-environment-refresh
+Functionality
+
+    zsh-dump-rc [*]
+
+        zsh-ln-refresh
+
+        zsh-paths-refresh
+
+        homebrew-install
+
+        xdg-environment-refresh
 
 ---
 
