@@ -1,5 +1,7 @@
 # SH logger
 
+![logger](../assets/logger-screenshot.jpeg)
+
 ## Log visual
 
 log_level
