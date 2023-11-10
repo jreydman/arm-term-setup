@@ -1,6 +1,12 @@
 
 ***compose.sh***
 
+Using
+
+```bash
+/bin/bash init.sh
+```
+
 Overrides
 * XDG_*
 * ZSH_*

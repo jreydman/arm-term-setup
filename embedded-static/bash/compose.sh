@@ -104,7 +104,9 @@ export ZSH_TEMP=\$XDG_RUNTIME_DIR/zsh
 
 # override homebrew package manager paths
 export HOMEBREW_REPOSITORY=\$XDG_DATA_HOME/homebrew
-export HOMEBREW_PREFIX=\$XDG_CONFIG_HOME/homebrew
+
+# export HOMEBREW_PREFIX=/opt/homebrew # RECOMMENDED BY OFF MANUAL
+export HOMEBREW_PREFIX=\$XDG_CONFIG_HOME/homebrew # TESTING
 export HOMEBREW_CACHE=\$XDG_CACHE_HOME/homebrew
 export HOMEBREW_TEMP=\$XDG_RUNTIME_DIR/homebrew
 #########################################################
