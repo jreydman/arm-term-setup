@@ -54,12 +54,13 @@ environments_check "current_env_names[@]" "current_path_defaults[@]"
 paths_check "current_env_names[@]"
 }
 while IFS='=' read -r variable value; do
-if [[ $variable == \[*\] ]]; then
-  if [ "${#variables[@]}" -gt 0 ]; then process_module "$current_module" "${variables[@]}"; fi
-  current_module="${variable:1}"; current_module="${current_module%]}"
-  variables=()
-else variables+=("$variable" "$value")
-fi
+if [[ ! "$variable" =~ ^\s*# ]]; then
+  if [[ $variable == \[*\] ]]; then
+    if [ "${#variables[@]}" -gt 0 ]; then process_module "$current_module" "${variables[@]}"; fi
+    current_module="${variable:1}"; current_module="${current_module%]}"; variables=()
+    else variables+=("$variable" "$value"); 
+    fi
+  fi
 done < "$OVERRIDE_CONF"
 if [ "${#variables[@]}" -gt 0 ]; then process_module "$current_module" "${variables[@]}"; fi
 logger info "$FUNCNAME" successful
@@ -87,7 +88,9 @@ logger info "$FUNCNAME" successful
 
 rc_dump() {
 logger info $FUNCNAME init
-__shell_cfg=$(eval echo "\$${__shell}_CONFIG/\$RC_FILE")
+echo $ZSH_CONFIG
+__shell_cfg="$(eval echo "\$${__shell}_CONFIG/\$RC_FILE")"
+echo $__shell_cfg
 
 if [[ ! -e "$(eval echo "\$${__shell}_CONFIG/\$RC_PROFILE_FILE")" ]]; then
 touch "$(eval echo "\$${__shell}_CONFIG/\$RC_PROFILE_FILE")"
@@ -126,6 +129,7 @@ for env_var in "${MODULE_ENVS[@]}"; do
 done
 echo "# -- MODULE BOOTSTRAP -- [protected]" >> $__shell_cfg;
 for module_name in "${XDG_MODULES[@]}"; do
+echo $module_name
 if [[ ! -f $(eval echo $SH_SCRIPT_DIR/$module_name.module.sh) ]]; then continue; fi
 . $(eval echo $SH_SCRIPT_DIR/$module_name.module.sh)
 $module_name:bootstrap
@@ -145,6 +149,7 @@ rc_ln_refresh
 }
 #########################################################
 SETUP
-# logger:flow info $FUNCNAME close successful
+logger:flow info $FUNCNAME close successful
 # clear && printf '\e[3J'
+# cat $HOME/$RC_FILE
 exit 0

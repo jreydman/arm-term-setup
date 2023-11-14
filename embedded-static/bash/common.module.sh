@@ -15,14 +15,28 @@ environments_check() { # $1[env_names] $[env_default_values]
   done
 }
 
+make_path() {
+path_to_create="$1"
+if [[ "$(mkdir -p "$path_to_create" 2>&1)" == *"Permission denied"* ]]; then
+  sudo mkdir -p "$path_to_create"
+  if [ $? -eq 0 ]; then sudo chown -R $(whoami) "$path_to_create"; fi
+fi
+}
+
 paths_check() { # $1[env_name_paths] $2"force"?
 logger info "$FUNCNAME" init
 env_vars=("${!1}")
 for env_name_path in "${env_vars[@]}"; do
 path=$(eval echo "\${$env_name_path}")
 if [ -d "$path" ] && [ -z "$2" ]; then logger:flow warning "$FUNCNAME:$env_name_path" ${path} "already exists";
-elif [ -d "$path" ] && [ ! -z "$2" ]; then rm -rf "$path"; mkdir -p "$path"; logger:flow info "$FUNCNAME<force>:$env_name_path" ${path} successful;
-else mkdir -p "$path"; logger:flow info "$FUNCNAME:$env_name_path" ${path} successful;
+elif [ -d "$path" ] && [ ! -z "$2" ]; then
+  rm -rf "$path";
+  mkdir -p "$path";
+  logger:flow info "$FUNCNAME<force>:$env_name_path" ${path} successful;
+else 
+  make_path $path
+  # mkdir -p $path
+  logger:flow info "$FUNCNAME:$env_name_path" ${path} successful;
 fi
 done
 logger info "$FUNCNAME" successful
